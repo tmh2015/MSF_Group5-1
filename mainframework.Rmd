@@ -25,7 +25,7 @@ For our client , we want to use this dataset to solve 2 main problem?
 ### Method:  
 ####1 Describe the dataset  
 ```{r}
-cupid_data<-read.csv ("./Dataset/June 10-July 12, 2015 - Gaming, Jobs and Broadband - CSV.csv",colClasses = "factor")
+cupid_data<-read.csv ("./Dataset/June 10-July 12, 2015 - Gaming, Jobs and Broadband - CSV.csv")
 # dimension (row*col)
 # how many questions in each section
 # how the dataset was collected (date and which research house)
