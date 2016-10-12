@@ -1,0 +1,115 @@
+---
+title: "Final Draft"
+author: 'Group Five '
+date: "10/11/2016"
+output: pdf_document
+---
+###Introduction(Marnelia):  
+Who we are -> digital marketing consultant  
+What we will do -> help our client, Tinder, keeps growing and find monetization opportunity
+
+###Theory : what do you expect to find ? 
+For our client , we want to use this dataset to solve 2 main problem?  
+
+#### 1  What does dating app users look like?     
+* Is there any characteristic of dating app users?  
+* Can we use these characteristic to find our potential users?  
+* Besides demographic data, this dataset also has behavioral data.   Can we use these data to improve our app?    
+  
+#### 2  How can Tinder grow? How can Tinder make money?      
+* Where to advertise: social media, online shopping website....?  
+* Other advertisement opportunity? We will use gaming and job data to see if these websites or apps can help us to recruit more users?  
+* In return, after above strategy, when we have enough user base, we will consider to sell Ads in Tinder app. Can we consider these websites/apps as our potential advertisement buyers? If yes, what kind of data can support our argument?  
+
+
+### Method:  
+####1 Describe the dataset  
+```{r}
+cupid_data<-read.csv ("./Dataset/June 10-July 12, 2015 - Gaming, Jobs and Broadband - CSV.csv",colClasses = "factor")
+# dimension (row*col)
+# how many questions in each section
+# how the dataset was collected (date and which research house)
+
+```
+
+####2 Strength  
+####3 Limitation  
+(Laurence, can you kindly help to fill first part?)
+
+
+### Analysis  
+
+### 1. What does dating app users look like?
+
+#### 1.1 How does our original user look like? demographic analysis (Lawrence & Marnelia) (Yerik)
+Income, employment - Lawrence
+```{r}
+## your code here
+```
+
+Age,gender,ideology,..... - Marnelia
+```{r}
+## your code here
+```
+
+Other interesting - Yerik
+```{r}
+## your code here
+```
+
+
+Insight : summarize a few demographic traits of our original users
+
+#### 1.2 How does our potential users look like? demographic analysis (Marnelia)   
+Marnelia will use opinion about online dating to group users (eg. anyone who agree with more than three dating opinion will be grouped into potential users.)
+
+```{r}
+## your code here
+## Find our target users (potential users who are not against online dating but haven't use it before)
+```
+
+Insight :summarize a few demographic traits of our potential
+
+
+
+### 2. How to grow and make money?
+#### 2.1 The most tradition way of growing is through paid media and collaboration. Can we know more about our users digital profile, such as online shopping, social media, and use this insight to form our marketing strategy? (Mei)
+
+```{r}
+## your code here
+## the relationship between people's preference or habits of cellphone and Internet in daily life and online dating preference
+## According to the characteristic of potential users, make our marketing strategy ( where to advertise: social media, online shopping website...) 
+```
+Insight : summarize a few behavior traits of our users and potential users
+
+#### 2.2 Other advertisement opportunity? We will use gaming and job data to see if these websites or apps can help us to recruit more users?  (Chewei and Mei-job, Vrat and Yerik-gaming )
+```{r CHEWEI AND MEI}
+## your code here -chewei and mei
+## relationship between job searching preference and online dating preference  (Mei & Zhewei)
+```
+
+Insight: Can we use gaming/job website as one of growth channel?
+
+```{r Vrat and Yerik}
+## your code here -vrat and yerik
+## relationship between gaming and online dating preference (Yerik & Virat)
+```
+
+#### 2.3 After the phase of growth, we will seek monetization opportunity. Are the mentioned websites and app our potential advertisement buyers? (Chewei and Mei-job, Vrat and Yerik-gaming )
+```{r}
+## your code here -chewei and mei
+
+```
+
+```{r}
+## your code here -Yerik and Vrat
+
+```
+
+Insight: Can we sell ads to these websites/apps?
+
+### Conclusion
+
+#### 1 . Summarize what we find interesting
+#### 2 . Next step : What do we suggest Tinder to do?
+#### 3 . Further study : What kind of data we want to include in this dataset?
