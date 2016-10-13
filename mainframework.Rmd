@@ -48,7 +48,7 @@ EMPLNW	Are you now employed full-time, part-time, retired, or are you not employ
 99	(VOL.) Refused
 ```{r}
 table(cupid_data$emplnw)
-# The following factors (1,2,3,4) represent 1896/2001 respondents. They are retained while factors (5,6,7,8,98,99) will be recategorised as others. 
+# The following factors (1,2,3,4) represent 1896/2001 respondents. They are retained while factors (5,6,7,8,98,99) will be recategorised as others. a
 
 cupid_data$emplnw_group <-""
 for (i in 1:(nrow(cupid_data))){
