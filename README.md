@@ -1,3 +1,8 @@
 # MSF_Group5
 
-test
+<<<<<<< HEAD
+
+fdsf 
+=======
+test2
+>>>>>>> master
