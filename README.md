@@ -1,4 +1,3 @@
 # MSF_Group5
 
-<<<<<<< HEAD
->>>>>>> master
+This is group5 project
