@@ -16,6 +16,7 @@ library(pscl)
 library(gridExtra)
 library(dplyr)
 library(stargazer)
+library(xtable)
 ```
 
 ###Introduction(Marnelia):  
@@ -206,6 +207,7 @@ Insight :summarize a few demographic traits of our potential
 #### 2.1 The most tradition way of growing is through paid media and collaboration. Can we know more about our users digital profile, such as online shopping, social media, and use this insight to form our marketing strategy? (Mei)
 
 ## Social Media
+This part is to analyse whether people who used social media sites such as Facebook, Twitter or LinkedIn to look for a job, to apply for a job that you found out about on social media or to let their friends know about a job, tend to use online dating app.
 
 ```{r,echo=FALSE}
 ## your code here
@@ -235,16 +237,17 @@ for (i in 1:nrow(tab)){
 }
 
 tab$date2a[which(tab["date2a"] == 2)] <- 0
-tab2 <- melt(tab)
 
-chisq.test(tab$date2a, tab$social_media_pref)
+pvalue <- chisq.test(tab$date2a, tab$social_media_pref)$p.value
+
+xtable(table(factor(tab$date2a,labels=c("Yes","No")),factor(tab$social_media_pref,labels=c("Used","Not used"))))
 
 model.social <- glm(factor(date2a) ~ factor(social_media_pref), data = tab, family = "binomial")
 summary(model.social)
 pR2(model.social)
 
 ```
-
+P value is $pvalue$ less than 0.05, so the there is a relationship between using online dating app and using social media to find a job. The logistic model 
 
 ## cellphone preference and online dating app
 
