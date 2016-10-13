@@ -2,7 +2,7 @@
 title: "Final Draft"
 author: 'Group Five '
 date: "10/11/2016"
-output: pdf_document
+output: html_document
 ---
 
 ```{r Library, include=FALSE}
@@ -14,12 +14,8 @@ library(sqldf)
 library(rms)
 library(pscl)
 library(gridExtra)
-<<<<<<< HEAD
-library(dplyr)
 library(stargazer)
-=======
 library (dplyr)
->>>>>>> master
 ```
 
 ###Introduction(Marnelia):  
@@ -213,9 +209,8 @@ Insight :summarize a few demographic traits of our potential
 ## Social Media
 
 ```{r,echo=FALSE}
-=======
-```{r}
->>>>>>> master
+
+
 ## your code here
 ## the relationship between people's preference or habits of cellphone and Internet in daily life and online dating preference
 ## According to the characteristic of potential users, make our marketing strategy ( where to advertise: social media, online shopping website...) 
@@ -229,7 +224,7 @@ Insight :summarize a few demographic traits of our potential
 # snsjob1c.	Used social media to let your friends know about a job that was available at your place of employment
 
 # data preparation
-<<<<<<< HEAD
+
 tab <- cupid_data[,c("date2a", "snsjob1a", "snsjob1b", "snsjob1c")]
 tab <- filter(tab, date2a == 1|date2a == 2, 
                       snsjob1a == 1|snsjob1a == 2, 
@@ -256,7 +251,6 @@ pR2(model.social)
 
 ```{r}
 
-=======
 tab <- cupid_data[,c("date1a", "snsjob1a", "snsjob1b", "snsjob1c")]
 tab <- filter(tab, date1a == 1|date1a == 2, 
                       snsjob1a == 1|snsjob1a == 2, 
@@ -298,7 +292,7 @@ summary(model.social)
 pR2(model.social)  # pesudo r square
 
 #pesudo r square of the first model is relatively larger than the other two, so choose snsjob1a 
->>>>>>> master
+
 ```
 
 ```{r}
@@ -344,16 +338,13 @@ model.cellphone <- glm(factor(date2a) ~ factor(q5b),
 summary(model.cellphone)
 pR2(model.cellphone)
 #test whether there is an overdispersion
-<<<<<<< HEAD
-fitod <- glm(factor(date2a) ~ factor(q5b),
-=======
+
 fitod <- glm(factor(date2a) ~ factor(q5a),
->>>>>>> master
              data = cellphone.table,
              family = "quasibinomial")
 pchisq(summary(fitod)$dispersion * model.cellphone$df.residual, 
        model.cellphone$df.residual, lower=F)
-<<<<<<< HEAD
+
 
 
 ```
@@ -471,8 +462,7 @@ pchisq(summary(fitod)$dispersion * model.logit2$df.residual, model.logit2$df.res
 
 
 
-=======
->>>>>>> master
+
 ```
 
 Insight : summarize a few behavior traits of our users and potential users
@@ -553,12 +543,61 @@ chisq.test(table(date1a.game1))
 chisq.test(table(date2a.game1))
 ```
 
-
 #### 2.3 After the phase of growth, we will seek monetization opportunity. Are the mentioned websites and app our potential advertisement buyers? (Chewei and Mei-job, Vrat and Yerik-gaming )
-```{r}
-## your code here -chewei and mei
+#####2.3.1 Difference of online dating between employment status.
+###### Assumption: In this question, we are going to lay the foundatino for our monetization strategy. This part will analyze  our users' employment status and if our users are attractive customers of advertisers. 
+*In this quesiton, we foucs more on people who use dating app. 
 
+```{r CHEWEI2, echo=FALSE, include=FALSE}
+## your code here -chewei and mei
+## relationship between job searching preference and online dating preference  (Zhewei)
+cupid_data1 <- read.csv ( "./Dataset/June 10-July 12, 2015 - Gaming, Jobs and Broadband - CSV.csv", colClasses = "factor" )
+cupid_data1 <- tbl_df( cupid_data1 )
+cupid_data1<-cbind(cupid_data1,cupid_data$emplnw_group,             cupid_data$inc_group, cupid_data$educ2)
+#cupid_data1$`cupid_data$emplnw_group`
+datingpeople <- cupid_data1 %>% filter (( eminuse == 1 | intmob                   ==1 ) & smart1 == 1 )
 ```
+
+
+```{r}
+ggplot(data=cupid_data1,aes(x=`cupid_data$emplnw_group`))+geom_bar(aes(fill=sex))
+datejobtable<-table(  
+              cupid_data1$`cupid_data$emplnw_group`,cupid_data1$date2a)
+# exclude emplnw 5~9 (since too little obeservation, and date2a)
+datejobtable<-datejobtable[,2:3] 
+datejobtable
+chisq.test(datejobtable)
+```
+From above graphic, we can find that people who have full-time work are more likely to be a dating app users. We futher conduct a chi-square test to testify if dating app usage will affect their employment status. The p-value is 0.07, quite close to 0.05 siginificant level. Therefore, we prove that our users are potential customers for advertiser.   
+##### Action : We will use this figure in our sales kit to convince our advertisers that by investing in our in-app AD, they can acquire huge return. 
+
+#### 2.3.2: Is there a model can be used to describe job emplyment and dating app usage?  
+#### Assumption: We narrow down our potential customers to online job websites. Here we are going to access if there is any model we can use to predict one's usage of online job seeking.
+```{r}
+datingpeople[,"age"]<-as.numeric(unlist(datingpeople[,"age"]))
+for (i in 1:nrow(datingpeople)){
+  if (datingpeople[i,"marital"]=="1"){
+    datingpeople[i,"clsmari"]=1
+  }
+  else if (datingpeople[i,"marital"]=="2"){
+    datingpeople[i,"clsmari"]=1
+  }
+  else{
+    datingpeople[i,"clsmari"]=2
+  }
+}
+
+ggplot(datingpeople, aes(x=smjob1))+geom_bar(aes(fill=date2a))
+dating_between<-glm(smjob1~date2a+age+clsmari,data=datingpeople,family = "binomial")
+summary(dating_between)
+pR2(dating_between)
+#exp(confint(dating_between))
+#require(rms)
+#mm<-lrm(smjob1~date2a,data=datingpeople)
+#summary(mm)
+```
+If we use date2a (usin dating app) as predictaor of smjob1(using mobile phone to find job), the p-value of intercept, which is the base case of using dating app, is less than 0.05 significance; and p-value of date2a, which is not using dating app, is less than 00.05 significance. 
+#### Action: Merely using dating and age can give us 12% of R^2. We believe that if we can combine more demographic targeting in our tinder database, then we can have a more accurate targeting system for our advertisers. 
 
 
 ```{r, echo = FALSE,out.width = "60%", fig.align = "center"}
@@ -610,4 +649,3 @@ Insight: Can we sell ads to these websites/apps?
 
 
 
-# test ming hui
