@@ -552,20 +552,22 @@ chisq.test(table(date2a.game1))
 ## relationship between job searching preference and online dating preference  (Zhewei)
 cupid_data1 <- read.csv ( "./Dataset/June 10-July 12, 2015 - Gaming, Jobs and Broadband - CSV.csv", colClasses = "factor" )
 cupid_data1 <- tbl_df( cupid_data1 )
+cupid_data1<-cbind(cupid_data1,cupid_data$emplnw_group,             cupid_data$inc_group, cupid_data$educ2)
+#cupid_data1$`cupid_data$emplnw_group`
 datingpeople <- cupid_data1 %>% filter (( eminuse == 1 | intmob                   ==1 ) & smart1 == 1 )
 ```
 
 
 ```{r}
-datingpeople1<-datingpeople%>%filter(emplnw==1|emplnw==2|emplnw==3|emplnw==4)
-ggplot(data=cupid_data,aes(x=emplnw_group))+geom_bar()
-datejobtable<-table(datingpeople1$emplnw,datingpeople1$date2a)
+ggplot(data=cupid_data1,aes(x=`cupid_data$emplnw_group`))+geom_bar(aes(fill=sex))
+datejobtable<-table(  
+              cupid_data1$`cupid_data$emplnw_group`,cupid_data1$date2a)
 # exclude emplnw 5~9 (since too little obeservation, and date2a)
-datejobtable<-datejobtable[1:4,2:3] 
+datejobtable<-datejobtable[,2:3] 
 datejobtable
 chisq.test(datejobtable)
 ```
-From above graphic, we can find that people who have full-time work are more likely to be a dating app users. We futher conduct a chi-square test to testify if dating app usage will affect their employment status. The p-value is 0.04, below 0.05 siginificant level. Therefore, we prove that our users are potential customers for advertiser.   
+From above graphic, we can find that people who have full-time work are more likely to be a dating app users. We futher conduct a chi-square test to testify if dating app usage will affect their employment status. The p-value is 0.07, quite close to 0.05 siginificant level. Therefore, we prove that our users are potential customers for advertiser.   
 ##### Action : We will use this figure in our sales kit to convince our advertisers that by investing in our in-app AD, they can acquire huge return. 
 
 #### 2.3.2: Is there a model can be used to describe job emplyment and dating app usage?  
