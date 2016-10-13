@@ -25,12 +25,132 @@ For our client , we want to use this dataset to solve 2 main problem?
 ### Method:  
 ####1 Describe the dataset  
 ```{r}
+setwd("D:/Users/Minghui/Documents/Imperial Courses/MathStats Foundation/Group Assignment/Assignment")
+file = "June 10-July 12, 2015 - Gaming, Jobs and Broadband_revised by Mei.csv"
+cupid_data <- read.csv(file, header = T)
+
 cupid_data<-read.csv ("./Dataset/June 10-July 12, 2015 - Gaming, Jobs and Broadband - CSV.csv",colClasses = "factor")
 # dimension (row*col)
 # how many questions in each section
 # how the dataset was collected (date and which research house)
 
 ```
+
+### Data Cleansing ###
+
+ASK ALL:
+EMPLNW	Are you now employed full-time, part-time, retired, or are you not employed for pay? {PIAL trend – added 98 ‘DK’ and change REF from ‘9’ to ‘99’}
+1	Employed full-time
+2	Employed part-time
+3	Retired
+4	Not employed for pay
+5	(VOL.) Have own business/self-employed
+6	(VOL.) Disabled
+7	(VOL.) Student
+8	(VOL.) Other
+98	(VOL.) Don't know
+99	(VOL.) Refused
+```{r}
+table(cupid_data$emplnw)
+# The following factors (1,2,3,4) represent 1896/2001 respondents. They are retained while factors (5,6,7,8,98,99) will be recategorised as others. 
+
+cupid_data$emplnw_group <-""
+for (i in 1:(nrow(cupid_data))){
+  if(cupid_data[i,"emplnw"] == "1") cupid_data[i,"emplnw_group"] <- "Employed full-time"
+  if(cupid_data[i,"emplnw"] == "2") cupid_data[i,"emplnw_group"] <- "Employed part-time"
+  if(cupid_data[i,"emplnw"] == "3") cupid_data[i,"emplnw_group"] <- "Retired"
+  if(cupid_data[i,"emplnw"] == "4") cupid_data[i,"emplnw_group"] <- "Not employed for pay"
+  if(cupid_data[i,"emplnw"] == "5") cupid_data[i,"emplnw_group"] <- "Others" 
+  if(cupid_data[i,"emplnw"] == "6") cupid_data[i,"emplnw_group"] <- "Others"
+  if(cupid_data[i,"emplnw"] == "7") cupid_data[i,"emplnw_group"] <- "Others"
+  if(cupid_data[i,"emplnw"] == "8") cupid_data[i,"emplnw_group"] <- "Others"
+  if(cupid_data[i,"emplnw"] == "98") cupid_data[i,"emplnw_group"] <- "Others"
+  if(cupid_data[i,"emplnw"] == "99") cupid_data[i,"emplnw_group"] <- "Others"
+  }
+
+table(cupid_data$emplnw_group)
+```
+
+ASK IF EMPLOYED (EMPLNW=1,2,5):
+EMPTYPE1	How would you describe the place where you work? [READ]
+1	A large corporation
+2	A medium-size company
+3	A small business
+4	A part of the federal, state or local government
+5	A school or educational institution, OR
+6	A non-profit organization?
+7	(VOL.) Other
+8	(VOL.) Self-employed/work at home
+98	(VOL.) Don’t know
+99	(VOL.) Refused
+```{r}
+table(cupid_data$emptype1)
+# The following factors (1,2,3,4,5) represent 963/1100 respondents for the question. Factor 4 & 5 will be re-categorised as Public Sector. The factors (6,7,8,98) will be recategorised as others. 
+
+cupid_data$emptype1_group <-""
+
+for (i in 1:(nrow(cupid_data))){
+  ifelse(cupid_data[i,"emptype1"] == 1, cupid_data[i, "emptype1_group"] <- "A large corporation",
+  ifelse(cupid_data[i,"emptype1"] == 2, cupid_data[i,"emptype1_group"] <- "A medium-size company", 
+  ifelse(cupid_data[i,"emptype1"] == 3, cupid_data[i,"emptype1_group"] <- "A small business", 
+  ifelse(cupid_data[i,"emptype1"] == 4, cupid_data[i,"emptype1_group"] <- "Public Sector", 
+  ifelse(cupid_data[i,"emptype1"] == 5, cupid_data[i,"emptype1_group"] <- "Public Sector",
+  ifelse(cupid_data[i,"emptype1"] == 6, cupid_data[i,"emptype1_group"] <- "Others",
+  ifelse(cupid_data[i,"emptype1"] == 7, cupid_data[i,"emptype1_group"] <- "Others",
+  ifelse(cupid_data[i,"emptype1"] == 8, cupid_data[i,"emptype1_group"] <- "Others",
+  ifelse(cupid_data[i,"emptype1"] == 98, cupid_data[i,"emptype1_group"] <- "Others",
+  ifelse(cupid_data[i,"emptype1"] == 99, cupid_data[i,"emptype1_group"] <- "Others",
+  cupid_data[i,"emptype1_group"] <- "No data"))))))))))
+  }
+
+table(cupid_data$emptype1_group)
+
+```
+
+ASK ALL:
+INC	Last year -- that is in 2014 -- what was your total family income from all sources, before taxes? Just stop me when I get to the right category... [READ] {Master INC2}
+1	Less than $10,000
+2	10 to under $20,000
+3	20 to under $30,000
+4	30 to under $40,000
+5	40 to under $50,000
+6	50 to under $75,000
+7	75 to under $100,000
+8	100 to under $150,000
+9	$150,000 or more
+98	(VOL.) Don't know
+99	(VOL.) Refused
+
+
+```{r}
+table(cupid_data$inc)
+# The team created 4 categories of income level for this analysis.For a sample size of 2001, there are 1696 who revealed their salary. The income is then segregated into 4 main groups as follows.
+# Bottom one-third(524 pax) - Between 0 - 30000
+# Middle one-third(604) - Between 30000 - 75000
+# Upper one-third(405) - Between 75000 - 150000
+# Ultra-rich(163) - Above 150000
+# Refused/Don't Know(305) 
+
+cupid_data$inc_group <-""
+  
+for (i in 1:(nrow(cupid_data))){
+  if(cupid_data[i,"inc"] == "1") cupid_data[i,"inc_group"] <- "Low-income" 
+  if(cupid_data[i,"inc"] == "2") cupid_data[i,"inc_group"] <- "Low-income"
+  if(cupid_data[i,"inc"] == "3") cupid_data[i,"inc_group"] <- "Low-income"
+  if(cupid_data[i,"inc"] == "4") cupid_data[i,"inc_group"] <- "Middle-income"
+  if(cupid_data[i,"inc"] == "5") cupid_data[i,"inc_group"] <- "Middle-income"
+  if(cupid_data[i,"inc"] == "6") cupid_data[i,"inc_group"] <- "Middle-income"
+  if(cupid_data[i,"inc"] == "7") cupid_data[i,"inc_group"] <- "Upper-income"
+  if(cupid_data[i,"inc"] == "8") cupid_data[i,"inc_group"] <- "Upper-income"
+  if(cupid_data[i,"inc"] == "9") cupid_data[i,"inc_group"] <- "Ultra-rich"
+  if(cupid_data[i,"inc"] == "98") cupid_data[i,"inc_group"] <- "Refused/Rejected"
+  if(cupid_data[i,"inc"] == "99") cupid_data[i,"inc_group"] <- "Refused/Rejected"  
+}
+
+table(cupid_data$inc_group)
+
+```
+
 
 ####2 Strength  
 ####3 Limitation  
