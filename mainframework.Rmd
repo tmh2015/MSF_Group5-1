@@ -244,6 +244,7 @@ for (i in 1:nrow(tab)){
 }
 
 tab$date2a[which(tab["date2a"] == 2)] <- 0
+tab2 <- melt(tab)
 
 chisq.test(tab$date2a, tab$social_media_pref)
 
