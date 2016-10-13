@@ -4,6 +4,18 @@ author: 'Group Five '
 date: "10/11/2016"
 output: pdf_document
 ---
+
+```{r Library, include=FALSE}
+library(ggplot2)
+library(reshape2)
+library(grid)
+library(scales)
+library(sqldf)
+library(rms)
+library(pscl)
+library(gridExtra)
+```
+
 ###Introduction(Marnelia):  
 Who we are -> digital marketing consultant  
 What we will do -> help our client, Tinder, keeps growing and find monetization opportunity
@@ -205,11 +217,75 @@ Insight : summarize a few behavior traits of our users and potential users
 ```
 
 Insight: Can we use gaming/job website as one of growth channel?
+######Sample distribution of gaming response across gender and age group
+```{r, echo = FALSE,out.width = "60%", fig.align = "center"}
+#Yerik
+game1 <- cupid_data[cupid_data["game1"] == c(1,2),]
+#summary(game1)
 
-```{r Vrat and Yerik}
-## your code here -vrat and yerik
-## relationship between gaming and online dating preference (Yerik & Virat)
+#Gender
+p1 <- ggplot(data = game1)+geom_bar(aes(x=factor(game1,levels=c(1,2),labels=c("Yes","No")),fill=factor(sex)),position="dodge",stat="count")+labs(x="", y="No. of Respondents", title="Have you ever played video games?-Gender")
+
+#Age
+for (i in 1:nrow(game1)) {
+  if (game1[i,"age"]<= 35) game1[i,"ageGroup"] <- "<=35"
+  if (game1[i,"age"] > 35 & game1[i,"age"] <= 50) game1[i,"ageGroup"] <- "<=50"
+  if (game1[i,"age"] > 50 & game1[i,"age"] <= 65) game1[i,"ageGroup"] <- "<=65"
+  if (game1[i,"age"] > 65) game1[i,"ageGroup"] <- ">65"
+}
+p2 <- ggplot(data = game1)+geom_bar(aes(x=factor(game1,levels=c(1,2),labels=c("Yes","No")),fill=ageGroup),position="dodge",stat="count")+labs(x="", y="No. of Respondents", title="Have you ever played video games?-Age")
+grid.arrange(p1,p2)
 ```
+ 
+######Whether there is a difference in age and gender in terms of gaming in the population? 
+
+Chi-squared test is used to test whether there is an inequal distribution in gaming population across gender and age group.
+
+H0: There is no gender difference in the distribution of playing or not playing game in population
+```{r, echo = FALSE,out.width = "60%", fig.align = "center"}
+#Yerik
+#Proportion test (H0: There is no gender difference in the distribution of playing or not playing game in population)
+game1_test <- game1[game1[,"game1"]==c(1,2),c("sex","game1")]
+#summary(game1_test)
+chisq.test(table(game1_test))
+```
+p-value is 0.935, which fails to reject H0.
+
+H0: There is no age difference in the distribution of playing or not playing game in population
+```{r, echo = FALSE,out.width = "60%", fig.align = "center"}
+#There is no gender difference among gaming people
+#No need to analyse game3
+game1_test <- game1[game1[,"game1"]==c(1,2),c("ageGroup","game1")]
+#summary(game1_test)
+chisq.test(table(game1_test))
+#There is age difference among gaming people
+```
+p-value is 2.954e-09, which rejects H0 at 1% of significance level.
+
+From above two tests, we conclude  that there is a significant inequal distribution across age group in gaming population.
+
+######Relationship between gaming and online dating
+```{r, echo = FALSE,out.width = "60%", fig.align = "center"}
+#Yerik
+#game1=1,date
+date1a.game1 <- game1[game1["date1a"]==c(1,2),c("date1a","game1")]
+date1a.game1 <- na.omit(date1a.game1)
+date2a.game1 <- game1[game1["date2a"]==c(1,2),c("date2a","game1")]
+date2a.game1 <- na.omit(date2a.game1)
+#summary(date2a.game1)
+p1 <- ggplot(data=date1a.game1)+geom_bar(aes(x=factor(date1a),fill=factor(game1)),position="dodge",stat="count")+labs(x="Dating Sites Usage", y="No. of Respondents", title="The Relationship between Gaming and Dating Sites Usage")
+p2 <- ggplot(data=date2a.game1)+geom_bar(aes(x=factor(date2a),fill=factor(game1)),position="dodge",stat="count")+labs(x="Dating App Usage", y="No. of Respondents", title="The Relationship between Gaming and Dating App Usage")
+grid.arrange(p1,p2)
+```
+
+The two charts indicate that among either group who did or did not have online dating experience, more than 50% percent played game before. (how to deduce that this conclusion applies in population?)
+
+```{r, echo = FALSE,out.width = "60%", fig.align = "center"}
+#chisq.test (is it appropraite to use chisq.test here?)
+chisq.test(table(date1a.game1))
+chisq.test(table(date2a.game1))
+```
+
 
 #### 2.3 After the phase of growth, we will seek monetization opportunity. Are the mentioned websites and app our potential advertisement buyers? (Chewei and Mei-job, Vrat and Yerik-gaming )
 ```{r}
@@ -217,10 +293,45 @@ Insight: Can we use gaming/job website as one of growth channel?
 
 ```
 
-```{r}
-## your code here -Yerik and Vrat
 
+```{r, echo = FALSE,out.width = "60%", fig.align = "center"}
+## your code here Yerik
+date1a <- cupid_data[cupid_data["date1a"] == c(1,2),c("date1a","age")]
+date1a <- na.omit(date1a)
+for (i in 1:nrow(date1a)) {
+  if (date1a[i,"age"]<= 35) date1a[i,"ageGroup"] <- "<=35"
+  if (date1a[i,"age"] > 35 & date1a[i,"age"] <= 50) date1a[i,"ageGroup"] <- "<=50"
+  if (date1a[i,"age"] > 50 & date1a[i,"age"] <= 65) date1a[i,"ageGroup"] <- "<=65"
+  if (date1a[i,"age"] > 65) date1a[i,"ageGroup"] <- ">65"
+}
+p1 <- ggplot(data=date1a)+geom_bar(aes(x=factor(date1a),fill=ageGroup),position="dodge",stat="count")+labs(x="Online Dating Sites Usage", y="No. of Respondents", title="Online Dating Sites Usage across Age Group")
+
+date2a <- cupid_data[cupid_data["date2a"] == c(1,2),c("date2a","age")]
+date2a <- na.omit(date2a)
+for (i in 1:nrow(date2a)) {
+  if (date2a[i,"age"]<= 35) date2a[i,"ageGroup"] <- "<=35"
+  if (date2a[i,"age"] > 35 & date2a[i,"age"] <= 50) date2a[i,"ageGroup"] <- "<=50"
+  if (date2a[i,"age"] > 50 & date2a[i,"age"] <= 65) date2a[i,"ageGroup"] <- "<=65"
+  if (date2a[i,"age"] > 65) date2a[i,"ageGroup"] <- ">65"
+}
+p2 <- ggplot(data=date2a)+geom_bar(aes(x=factor(date2a),fill=ageGroup),position="dodge",stat="count")+labs(x="Online Dating App Usage", y="No. of Respondents", title="Online Dating App Usage across Age Group")
+grid.arrange(p1,p2)
 ```
+
+From the charts, we can see the online dating usage across different age groups. Those under 50 are more likely to become online dating users. So, will the factor of "gaming" help transform those potential users into users?
+
+```{r, echo = FALSE,out.width = "60%", fig.align = "center"}
+date1a.game1 <- game1[game1["date1a"]==2,c("game1","ageGroup")]
+date1a.game1 <- na.omit(date1a.game1)
+p1 <- ggplot(data=date1a.game1)+geom_bar(aes(x=ageGroup,fill=factor(game1)),position="dodge",stat="count")+labs(x="Age Group", y="No. of Respondents", title="Gaming across Age Group for Potential Users (no for online dating sites)")
+
+date2a.game1 <- game1[game1["date2a"]==2,c("game1","ageGroup")]
+date2a.game1 <- na.omit(date2a.game1)
+p2 <- ggplot(data=date2a.game1)+geom_bar(aes(x=ageGroup,fill=factor(game1)),position="dodge",stat="count")+labs(x="Age Group", y="No. of Respondents", title="Gaming across Age Group for Potential Users (no for online dating app)")
+grid.arrange(p1,p2)
+```
+
+For our potential users (people who answered "no" for online dating experience), a large portion played game, espeically for age group under 50. Doing advertisement on video games would be an effective strategy to attract more users for Tinder.
 
 Insight: Can we sell ads to these websites/apps?
 
