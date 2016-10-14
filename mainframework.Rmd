@@ -605,9 +605,3 @@ Insight: Can we sell ads to these websites/apps?
 #### 1 . Summarize what we find interesting
 #### 2 . Next step : What do we suggest Tinder to do?
 #### 3 . Further study : What kind of data we want to include in this dataset?
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> a2d4b6e1f054458758291203e70bbb60f15f7987
