@@ -40,6 +40,7 @@ For our client , we want to use this dataset to solve 2 main problem?
 ### Method:  
 ####1 Describe the dataset  
 ```{r}
+
 cupid_data<-read.csv ("./Dataset/June 10-July 12, 2015 - Gaming, Jobs and Broadband - CSV.csv",colClasses="factor")
 cupid_data[,"age"] <- as.numeric(cupid_data[,"age"])
 
@@ -164,6 +165,39 @@ table(cupid_data$inc_group)
 
 ```
 
+
+RACE	What is your race? Are you white, black, Asian, or some other race?
+IF R SAYS HISPANIC OR LATINO, PROBE: Do you consider yourself a WHITE (Hispanic/Latino) or a BLACK (Hispanic/Latino)? IF R DOES NOT SAY WHITE, BLACK OR ONE OF THE RACE CATEGORIES LISTED, RECORD AS “OTHER” (CODE 6)
+1	White
+2	Black or African-American
+3	Asian or Pacific Islander
+4	Mixed race
+5	Native American/American Indian
+6	Other (SPECIFY)
+8	(VOL.) Don't know
+9	(VOL.) Refused
+
+```{r}
+
+table(cupid_data$race)
+# Factors (1, 2, 3) represent 1813/2001 of the respondents. Hence factors (1, 2, 3) are retained while the remaining factors are recategorised.
+cupid_data$race_group <-""
+  
+for (i in 1:(nrow(cupid_data))){
+  if(cupid_data[i,"race"] == "1") cupid_data[i,"race_group"] <- "White" 
+  if(cupid_data[i,"race"] == "2") cupid_data[i,"race_group"] <- "Black"
+  if(cupid_data[i,"race"] == "3") cupid_data[i,"race_group"] <- "Asian"
+  if(cupid_data[i,"race"] == "4") cupid_data[i,"race_group"] <- "Others"
+  if(cupid_data[i,"race"] == "5") cupid_data[i,"race_group"] <- "Others"
+  if(cupid_data[i,"race"] == "6") cupid_data[i,"race_group"] <- "Others"
+  if(cupid_data[i,"race"] == "8") cupid_data[i,"race_group"] <- "Unknown/Rejected"
+  if(cupid_data[i,"race"] == "9") cupid_data[i,"race_group"] <- "Unknown/Rejected"
+}
+
+table(cupid_data$race_group)
+
+```
+
 ```{r}
 #regroup marriage status
 table(cupid_data$marital_group)
@@ -218,9 +252,28 @@ cupid_data$educ2_group <-factor(cupid_data$educ2_group)
 table(cupid_data$educ2_group)
 ```
 
+
 ####2 Strength  
 ####3 Limitation  
 (Laurence, can you kindly help to fill first part?)
+```{r}
+# 1. Proportion of ethnicity within sample is not representative of the real population
+us_race <- c("White", "Black", "Asian", "Others")
+us_race_perc <- c(72.4, 12.6, 4.8, 10.2)
+us_race_df <- data.frame(us_race, us_race_perc)
+us_race_plot <- ggplot(data = us_race_df) + geom_bar(aes(x="Race Composition", y=us_race_perc, fill = us_race), stat ="identity") + ylab("% Composition")
+
+survey_race_df<-data.frame(table(cupid_data$race_group))
+names(survey_race_df)<- c ("survey_race", "survey_race_perc")
+
+survey_race_plot <- ggplot(data = survey_race_df[c(1:3,5),]) + geom_bar(aes(x="Race Composition", y=survey_race_perc/1974*100, fill = survey_race), stat ="identity") + ylab("% Composition")
+
+grid.arrange(survey_race_plot, us_race_plot, ncol =2)
+# 2. Age group within sample is not representative of the real population. Approximately 50% of the respondents are between the age 50-75.
+
+ggplot(data = cupid_data) + geom_density(aes(x = age))
+
+```
 
 
 ### Analysis  
